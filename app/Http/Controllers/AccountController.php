@@ -114,7 +114,6 @@ class AccountController extends Controller
     //Logout
     public function LogOut(Request $request)
     {
-
         $request->validate([
             "id_user"=>"required|numeric"
         ]);
@@ -130,5 +129,5 @@ class AccountController extends Controller
         return ['msg' => 'Successfully logged out'];
     }
 
-  
+
 }

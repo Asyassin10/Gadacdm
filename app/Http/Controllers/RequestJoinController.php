@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\JoinProfRequest;
+use App\Models\ReqeustState;
+use Illuminate\Support\Facades\Hash;
+use App\Models\Role;
 
 class RequestJoinController extends Controller
 {
@@ -60,5 +65,67 @@ class RequestJoinController extends Controller
         return response($response, 201);
     }
 
+    public function AcceptProf(Request $request){
+
+            $validated = $request->validate([
+                'join_prof_requests_id'=>'required',
+            ]);
+            $date =Carbon::now();
+            $date->toDateTimeString();
+
+            $join_prof_requests = JoinProfRequest::where('join_prof_requests_id',$request->join_prof_requests_id)->first();
+            $join_prof_requests->reqeust_states_id = 2;
+            $join_prof_requests->save();
+            $join_prof_requests_x = JoinProfRequest::where('join_prof_requests_id',$request->join_prof_requests_id)->first();
+            $reqeust_states = $join_prof_requests_x->reqeust_states->name;
+            // create prof
+            $user = new User();
+            $user->name = $join_prof_requests->first_name.' '.$join_prof_requests->last_name;
+            $user->email = $join_prof_requests->email;
+            $user->password = Hash::make('password');
+            $user->role_id = 2;
+            $user->language_id =2;
+            $user->is_online =1;
+            $user->duration_connection_minutes =1;
+            $user->time_LogOut = $date;
+            $user->save();
+            $token = $user->createToken('auth_token')->plainTextToken;
+            $user_x = User::where('email', $join_prof_requests->email)->first();
+            $role = $user_x->role->role_name;
+            $response = [
+                'join_prof_requests_x'=>$join_prof_requests,
+                'reqeust_states'=>$reqeust_states,
+                'user' => $user_x,
+                'token' => $token,
+                'role' => $role,
+            ];
+            return response($response, 201);
+
+    }
+
+    public function rejected(Request $request){
+
+        $validated = $request->validate([
+            'join_prof_requests_id'=>'required',
+        ]);
+        $date =Carbon::now();
+        $date->toDateTimeString();
+
+        $join_prof_requests = JoinProfRequest::where('join_prof_requests_id',$request->join_prof_requests_id)->first();
+        $join_prof_requests->reqeust_states_id = 3;
+        $join_prof_requests->save();
+        $join_prof_requests_x = JoinProfRequest::where('join_prof_requests_id',$request->join_prof_requests_id)->first();
+        $reqeust_states = $join_prof_requests_x->reqeust_states->name;
+
+        $response = [
+            'join_prof_requests_x'=>$join_prof_requests,
+            'reqeust_states'=>$reqeust_states,
+        ];
+
+        return response($response, 201);
+    }
 
 }
+
+
+

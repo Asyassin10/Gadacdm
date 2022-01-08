@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class JoinProfRequest extends Model
 {
     use HasFactory;
+    protected $primaryKey="join_prof_requests_id";
 
     protected $fillable = [
         'first_name',
@@ -22,5 +23,10 @@ class JoinProfRequest extends Model
         'phone',
         "image",
         "age",
+        "reqeust_states_id",
     ];
+
+    public function reqeust_states(){
+        return $this->belongsTo(ReqeustState::class,"reqeust_states_id");
+    }
 }
