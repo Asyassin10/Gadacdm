@@ -18,7 +18,6 @@ class CreateJoinProfRequestsTable extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email');
-            $table->boolean('state_requests')->default(0);
             $table->string('cv');
             $table->string('job_title');
             $table->string('address');
