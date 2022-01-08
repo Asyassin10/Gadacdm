@@ -5,13 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterProfRequest;
 use App\Http\Requests\RegisterStudentRequest;
+use App\Models\JoinProfRequest;
 use App\Models\Role;
 use App\Models\User;
 use App\Services\AuthenticationServices;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
-//1|RLgYdwgwwJ0RslcEr7zVpunsL1oLiAfVzolQ2Tjk
+
 class AccountController extends Controller
 {
     //Login
@@ -117,7 +118,7 @@ class AccountController extends Controller
         $request->validate([
             "id_user"=>"required|numeric"
         ]);
-        $user = $request->id_user;
+        $user = User::where('id',$request->id_user);
         $date =Carbon::now();
         $date->toDateTimeString();
         $date_duration_minute = $date->diffInMinutes($user->time_Login);
@@ -129,4 +130,5 @@ class AccountController extends Controller
         return ['msg' => 'Successfully logged out'];
     }
 
+  
 }

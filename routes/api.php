@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\RequestJoinController;
 use App\Http\Controllers\TestController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,7 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::post('GadAcademy/LogOut',[AccountController::class , 'LogOut']);
 });
 
+Route::post('GadAcademy/Join_us',[RequestJoinController::class,'join_us']);
 Route::post('GadAcademy/RegisterStudent',[AccountController::class,'RegisterStudent']);
 Route::post('GadAcademy/RegisterProf',[AccountController::class,'RegisterProf']);
 Route::post('login',[AccountController::class,'login']);
